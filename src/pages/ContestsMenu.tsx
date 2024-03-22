@@ -56,6 +56,7 @@ export default function ContestsMenu() {
           items={items}
           selectedKeys={contestId ? [contestId] : []}
         />
+        <GoogleLoginButton />
       </Sider>
       <div style={{ marginLeft: 200 }}>
         {contestId && <Outlet />}

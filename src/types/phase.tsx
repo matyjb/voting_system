@@ -1,0 +1,1 @@
+export type TContestPhase = "SUBMISSION" | "VOTING" | "CLOSED";
