@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ExperimentOutlined } from "@ant-design/icons";
-import { Avatar, Layout, Menu } from "antd";
+import { Avatar, Layout, Menu, MenuProps } from "antd";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { auth, db } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -8,8 +8,11 @@ import { collection, onSnapshot } from "@firebase/firestore";
 import { TContest } from "../types";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import MenuItem from "antd/es/menu/MenuItem";
+import CreateContestModalButton from "../components/CreateContestModalButton";
 
 const { Sider } = Layout;
+
+type MenuItem = Required<MenuProps>["items"][number];
 
 export default function ContestsMenu() {
   const [user] = useAuthState(auth);
@@ -19,24 +22,34 @@ export default function ContestsMenu() {
 
   useEffect(() => {
     if (!user) return;
-    onSnapshot(collection(db, `users/${user.uid}/contests`), (docs) => {
-      const docsData: TContest[] = [];
-      docs.forEach((doc) => {
-        docsData.push({ ...(doc.data() as TContest), fbref: doc.ref });
-      });
-      setContests(docsData);
-    });
+    const unsubscribe = onSnapshot(
+      collection(db, `users/${user.uid}/contests`),
+      (docs) => {
+        const docsData: TContest[] = [];
+        docs.forEach((doc) => {
+          docsData.push({ ...(doc.data() as TContest), fbref: doc.ref });
+        });
+        setContests(docsData);
+      }
+    );
+
+    return () => {
+      unsubscribe();
+    };
   }, [user]);
 
-  const items: any[] = contests.map((contest) => (
-    <MenuItem
-      key={contest.fbref.id}
-      onClick={() => navigate(`/edit/${contest.fbref.id}`)}
-      icon={contest.logoUrl ? <Avatar size="small" src={contest.logoUrl} /> :  <ExperimentOutlined />}
-    >
-      {contest.name}
-    </MenuItem>
-  ));
+  const items: MenuItem[] = contests.map((contest) => {
+    return {
+      key: contest.fbref.id,
+      onClick: () => navigate(`/edit/${contest.fbref.id}`),
+      icon: contest.logoUrl ? (
+        <Avatar size="small" src={contest.logoUrl} />
+      ) : (
+        <ExperimentOutlined />
+      ),
+      label: contest.name,
+    } as MenuItem;
+  });
 
   return (
     <Layout hasSider>
@@ -56,11 +69,10 @@ export default function ContestsMenu() {
           items={items}
           selectedKeys={contestId ? [contestId] : []}
         />
+        <CreateContestModalButton />
         <GoogleLoginButton />
       </Sider>
-      <div style={{ marginLeft: 200 }}>
-        {contestId && <Outlet />}
-      </div>
+      <div style={{ marginLeft: 200 }}>{contestId && <Outlet />}</div>
     </Layout>
   );
 }
