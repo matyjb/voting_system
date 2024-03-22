@@ -1,4 +1,4 @@
-import { auth, logout, signInWithGoogle } from "../firebase";
+import { auth, logout, signInWithGoogle } from "../../logic/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Button } from "antd";
 import { LogoutOutlined, LoginOutlined } from "@ant-design/icons";

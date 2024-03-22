@@ -1,10 +1,10 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import LandingPage from "./pages/LandingPage.tsx";
-import ErrorPage from "./pages/ErrorPage.tsx";
-import ContestsMenu from "./pages/ContestsMenu.tsx";
-import EditContestPage from "./pages/EditContestPage.tsx";
-import ContestPage from "./pages/ContestPage.tsx";
+import LandingPage from "./presentation/pages/LandingPage.tsx";
+import ErrorPage from "./presentation/pages/ErrorPage.tsx";
+import ContestsMenu from "./presentation/pages/ContestsMenu.tsx";
+import EditContestPage from "./presentation/pages/EditContestPage.tsx";
+import ContestPage from "./presentation/pages/ContestPage.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 

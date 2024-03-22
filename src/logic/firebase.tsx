@@ -23,7 +23,7 @@ import {
   TContestSubmission,
   TScore,
   TVote,
-} from "./types";
+} from "../data/types";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCWuI7P5Qi4oNmAGzTctcJMOwL8wksab6c",

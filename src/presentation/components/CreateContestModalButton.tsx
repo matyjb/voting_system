@@ -1,6 +1,6 @@
 import { Button, Input, Modal } from "antd";
 import { FunctionComponent, useState } from "react";
-import { addContest, auth } from "../firebase";
+import { addContest, auth } from "../../logic/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 
 interface CreateContestModalButtonProps {}
