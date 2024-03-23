@@ -62,6 +62,7 @@ const logout = () => {
 
 //* CONTESTS
 const addContest = async (user: User, name: string) => {
+  console.log("addContest", user, name);
   await addDoc(collection(db, `users/${user.uid}/contests`), {
     name,
     phase: "CLOSED",
@@ -69,23 +70,30 @@ const addContest = async (user: User, name: string) => {
 };
 
 const editContest = async (contest: TContest) => {
-  await setDoc(contest.fbref, { ...contest, fbref: undefined });
+  console.log("editContest", contest);
+  let { fbref, ...c } = contest;
+  await setDoc(contest.fbref, c);
 };
 
 const removeContest = async (contest: TContest) => {
+  console.log("removeContest", contest);
   await deleteDoc(contest.fbref);
 };
 
 //* CATEGORIES
 const addCategory = async (contest: TContest, name: string) => {
+  console.log("addCategory", contest, name);
   await addDoc(collection(db, `${contest.fbref.path}/categories`), { name });
 };
 
 const editCategory = async (category: TContestCategory) => {
-  await setDoc(category.fbref, { ...category, fbref: undefined });
+  console.log("editCategory", category);
+  let { fbref, ...c } = category;
+  await setDoc(category.fbref, c);
 };
 
 const removeCategory = async (category: TContestCategory) => {
+  console.log("removeCategory", category);
   await deleteDoc(category.fbref);
 };
 
@@ -96,6 +104,7 @@ const addSubmission = async (
   teamName: string,
   logoUrl?: string
 ) => {
+  console.log("addSubmission", contest, gameTitle, teamName, logoUrl);
   await addDoc(collection(db, `${contest.fbref.path}/submissions`), {
     gameTitle,
     teamName,
@@ -104,10 +113,13 @@ const addSubmission = async (
 };
 
 const editSubmission = async (submission: TContestSubmission) => {
-  await setDoc(submission.fbref, { ...submission, fbref: undefined });
+  console.log("editSubmission", submission);
+  let { fbref, ...s } = submission;
+  await setDoc(submission.fbref, s);
 };
 
 const removeSubmission = async (submission: TContestSubmission) => {
+  console.log("removeSubmission", submission);
   await deleteDoc(submission.fbref);
 };
 
@@ -117,6 +129,7 @@ async function addVote(
   scores: TScore[],
   voterTeamRef?: DocumentReference<DocumentData, DocumentData>
 ) {
+  console.log("addVote", contest, scores, voterTeamRef);
   await addDoc(collection(db, `${contest.fbref.path}/votes`), {
     scores,
     voterTeamRef,
@@ -130,6 +143,7 @@ const removeVote = async (
   submission: TContestSubmission,
   user: User
 ) => {
+  console.log("removeVote", contest, category, submission, user);
   await deleteDoc(
     doc(
       db,
