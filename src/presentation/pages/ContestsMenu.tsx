@@ -9,6 +9,7 @@ import { TContest } from "../../data/types";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import MenuItem from "antd/es/menu/MenuItem";
 import CreateContestModalButton from "../components/CreateContestModalButton";
+import { ContestProvider } from "../../logic/contexts/ContestContext";
 
 const { Sider } = Layout;
 
@@ -51,6 +52,8 @@ export default function ContestsMenu() {
     } as MenuItem;
   });
 
+  const currentlyViewedContest = contests.find((c) => c.fbref.id === contestId);
+
   return (
     <Layout hasSider>
       <Sider
@@ -67,12 +70,18 @@ export default function ContestsMenu() {
           theme="dark"
           mode="inline"
           items={items}
-          selectedKeys={contestId ? [contestId] : []}
+          selectedKeys={
+            currentlyViewedContest ? [currentlyViewedContest.fbref.id] : []
+          }
         />
         <CreateContestModalButton />
         <GoogleLoginButton />
       </Sider>
-      <div style={{ marginLeft: 200 }}>{contestId && <Outlet />}</div>
+      <ContestProvider contest={currentlyViewedContest}>
+        <div style={{ marginLeft: 200, width: "100%" }}>
+          {currentlyViewedContest && <Outlet />}
+        </div>
+      </ContestProvider>
     </Layout>
   );
 }
