@@ -77,11 +77,13 @@ export default function ContestsMenu() {
         <CreateContestModalButton />
         <GoogleLoginButton />
       </Sider>
-      <ContestProvider contest={currentlyViewedContest}>
-        <div style={{ marginLeft: 200, width: "100%" }}>
-          {currentlyViewedContest && <Outlet />}
-        </div>
-      </ContestProvider>
+      {currentlyViewedContest && (
+        <ContestProvider contest={currentlyViewedContest}>
+          <div style={{ marginLeft: 200, width: "100%" }}>
+            <Outlet />
+          </div>
+        </ContestProvider>
+      )}
     </Layout>
   );
 }
