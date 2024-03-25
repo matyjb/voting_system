@@ -11,7 +11,7 @@ import MenuItem from "antd/es/menu/MenuItem";
 import CreateContestModalButton from "../components/CreateContestModalButton";
 import { ContestProvider } from "../../logic/contexts/ContestContext";
 
-const { Sider } = Layout;
+const { Sider, Header, Content } = Layout;
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -55,35 +55,53 @@ export default function ContestsMenu() {
   const currentlyViewedContest = contests.find((c) => c.fbref.id === contestId);
 
   return (
-    <Layout hasSider>
-      <Sider
+    <Layout>
+      <Header
         style={{
-          overflow: "auto",
-          height: "100vh",
-          position: "fixed",
-          left: 0,
+          position: "sticky",
           top: 0,
-          bottom: 0,
+          zIndex: 1,
+          width: "100%",
+          display: "flex",
+          alignItems: "center",
         }}
       >
-        <Menu
-          theme="dark"
-          mode="inline"
-          items={items}
-          selectedKeys={
-            currentlyViewedContest ? [currentlyViewedContest.fbref.id] : []
-          }
-        />
-        <CreateContestModalButton />
-        <GoogleLoginButton />
-      </Sider>
-      {currentlyViewedContest && (
-        <ContestProvider contest={currentlyViewedContest}>
-          <div style={{ marginLeft: 200, width: "100%" }}>
-            <Outlet />
-          </div>
-        </ContestProvider>
-      )}
+        <div className="demo-logo" />
+      </Header>
+      <Layout hasSider>
+        <Sider
+          style={{
+            overflow: "auto",
+            height: "100vh",
+            position: "fixed",
+            left: 0,
+            top: 64,
+            bottom: 0,
+          }}
+        >
+          <Menu
+            theme="dark"
+            mode="inline"
+            items={items}
+            selectedKeys={
+              currentlyViewedContest ? [currentlyViewedContest.fbref.id] : []
+            }
+          />
+          <CreateContestModalButton />
+          <GoogleLoginButton />
+        </Sider>
+        <Layout style={{ marginLeft: 200 }}>
+          <Content
+            style={{ padding: "12px 48px", height: "calc(100vh - 64px)" }}
+          >
+            {currentlyViewedContest && (
+              <ContestProvider contest={currentlyViewedContest}>
+                <Outlet />
+              </ContestProvider>
+            )}
+          </Content>
+        </Layout>
+      </Layout>
     </Layout>
   );
 }
