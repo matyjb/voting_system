@@ -6,7 +6,7 @@ import { useContest } from "../../logic/contexts/ContestContext";
 interface ContestStatsProps {}
 
 const ContestStats: FunctionComponent<ContestStatsProps> = () => {
-  const { submissions } = useContest();
+  const { submissions, voters } = useContest();
   return (
     <Space direction="vertical">
       <Statistic
@@ -18,7 +18,7 @@ const ContestStats: FunctionComponent<ContestStatsProps> = () => {
       <Statistic
         style={{ textAlign: "right", minWidth: "200px" }}
         title="Votes"
-        value={1128}
+        value={voters?.reduce((s, v) => s + v.scores.length, 0) ?? 0}
         suffix={
           <Space>
             <LikeOutlined />

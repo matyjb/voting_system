@@ -22,8 +22,8 @@ import {
   TContestCategory,
   TContestSubmission,
   TScore,
-  TVote,
 } from "../data/types";
+import { TContestVoter } from "../data/types/vote";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCWuI7P5Qi4oNmAGzTctcJMOwL8wksab6c",
@@ -124,32 +124,22 @@ const removeSubmission = async (submission: TContestSubmission) => {
 };
 
 //* VOTES
-async function addVote(
+async function addVoter(
   contest: TContest,
   scores: TScore[],
   voterTeamRef?: DocumentReference<DocumentData, DocumentData>
 ) {
-  console.log("addVote", contest, scores, voterTeamRef);
-  await addDoc(collection(db, `${contest.fbref.path}/votes`), {
+  console.log("addVoter", contest, scores, voterTeamRef);
+  await addDoc(collection(db, `${contest.fbref.path}/voters`), {
     scores,
     voterTeamRef,
     timestamp: serverTimestamp(),
-  } as TVote);
+  } as TContestVoter);
 }
 
-const removeVote = async (
-  contest: TContest,
-  category: TContestCategory,
-  submission: TContestSubmission,
-  user: User
-) => {
-  console.log("removeVote", contest, category, submission, user);
-  await deleteDoc(
-    doc(
-      db,
-      `${contest.fbref.path}/categories/${category.fbref.id}/submissions/${submission.fbref.id}/votes/${user.uid}`
-    )
-  );
+const removeVoter = async (voter: TContestVoter) => {
+  console.log("removeVoter", voter);
+  await deleteDoc(voter.fbref);
 };
 
 export {
@@ -166,6 +156,6 @@ export {
   addSubmission,
   editSubmission,
   removeSubmission,
-  addVote,
-  removeVote,
+  addVoter,
+  removeVoter,
 };

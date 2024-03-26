@@ -13,12 +13,13 @@ import {
 import { onSnapshot, collection } from "@firebase/firestore";
 import { auth, db } from "../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { TContestVoter } from "../../data/types/vote";
 
-// TODO: provide categories, submissions, and votes (maybe) here also.
 const ContestContext = createContext<{
   contest?: TContest;
   categories?: TContestCategory[];
   submissions?: TContestSubmission[];
+  voters?: TContestVoter[];
 }>({});
 
 export function useContest() {
@@ -36,10 +37,12 @@ export const ContestProvider: FunctionComponent<ContestProviderProps> = ({
 }) => {
   const [categories, setCategories] = useState<TContestCategory[]>([]);
   const [submissions, setSubmissions] = useState<TContestSubmission[]>([]);
+  const [voters, setVoters] = useState<TContestVoter[]>([]);
   const [user] = useAuthState(auth);
 
   useEffect(() => {
     if (!user) return;
+
     const unsubCategories = onSnapshot(
       collection(db, `${contest.fbref.path}/categories`),
       (docs) => {
@@ -66,15 +69,31 @@ export const ContestProvider: FunctionComponent<ContestProviderProps> = ({
         setSubmissions(docsData);
       }
     );
+    const unsubVoters = onSnapshot(
+      collection(db, `${contest.fbref.path}/voters`),
+      (docs) => {
+        const docsData: TContestVoter[] = [];
+        docs.forEach((doc) => {
+          docsData.push({
+            ...(doc.data() as TContestVoter),
+            fbref: doc.ref,
+          });
+        });
+        setVoters(docsData);
+      }
+    );
 
     return () => {
       unsubCategories();
       unsubSubmissions();
+      unsubVoters();
     };
   }, [user]);
 
   return (
-    <ContestContext.Provider value={{ contest, categories, submissions }}>
+    <ContestContext.Provider
+      value={{ contest, categories, submissions, voters }}
+    >
       {children}
     </ContestContext.Provider>
   );

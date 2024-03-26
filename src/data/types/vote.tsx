@@ -1,7 +1,11 @@
-import { DocumentData, DocumentReference, Timestamp } from "@firebase/firestore";
+import {
+  DocumentData,
+  DocumentReference,
+  Timestamp,
+} from "@firebase/firestore";
 import { FbRef } from "./fbref";
 
-export type TVote = {
+export type TContestVoter = {
   timestamp: Timestamp;
   voterTeamRef?: DocumentReference<DocumentData, DocumentData>;
   scores: TScore[];
