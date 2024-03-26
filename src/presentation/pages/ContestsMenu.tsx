@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { ExperimentOutlined } from "@ant-design/icons";
-import { Avatar, Layout, Menu, MenuProps } from "antd";
+import { Avatar, Layout, Menu, MenuProps, Space, Typography } from "antd";
 import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { auth, db } from "../../logic/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
@@ -12,6 +12,8 @@ import CreateContestModalButton from "../components/CreateContestModalButton";
 import { ContestProvider } from "../../logic/contexts/ContestContext";
 
 const { Sider, Header, Content } = Layout;
+const logoUrl =
+  "https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg";
 
 type MenuItem = Required<MenuProps>["items"][number];
 
@@ -64,9 +66,16 @@ export default function ContestsMenu() {
           width: "100%",
           display: "flex",
           alignItems: "center",
+          justifyContent: "space-between",
         }}
       >
-        <div className="demo-logo" />
+        <Space>
+          <Avatar src={logoUrl} />
+          <Typography.Title level={3} style={{ color: "white", margin: 0 }}>
+            Voting System
+          </Typography.Title>
+        </Space>
+        <GoogleLoginButton />
       </Header>
       <Layout hasSider>
         <Sider
@@ -79,6 +88,12 @@ export default function ContestsMenu() {
             bottom: 0,
           }}
         >
+          <Typography.Title
+            level={5}
+            style={{ color: "white", margin: "16px 4px" }}
+          >
+            My contests
+          </Typography.Title>
           <Menu
             theme="dark"
             mode="inline"
@@ -88,7 +103,6 @@ export default function ContestsMenu() {
             }
           />
           <CreateContestModalButton />
-          <GoogleLoginButton />
         </Sider>
         <Layout style={{ marginLeft: 200 }}>
           <Content

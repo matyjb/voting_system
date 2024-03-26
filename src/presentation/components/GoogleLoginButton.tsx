@@ -1,11 +1,11 @@
 import { auth, logout, signInWithGoogle } from "../../logic/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { Button } from "antd";
-import { LogoutOutlined, LoginOutlined } from "@ant-design/icons";
+import { Avatar, Button, Popover, Space, Typography } from "antd";
+import { UserOutlined, GoogleOutlined } from "@ant-design/icons";
 import { useEffect } from "react";
 
 export default function GoogleLoginButton() {
-  const [user, loading, error] = useAuthState(auth);
+  const [user, , error] = useAuthState(auth);
 
   useEffect(() => {
     if (error) {
@@ -15,27 +15,30 @@ export default function GoogleLoginButton() {
 
   if (user) {
     return (
-      <Button
-        type="default"
-        size="large"
-        onClick={logout}
-        loading={loading}
-        icon={<LogoutOutlined />}
+      <Popover
+        content={
+          <Button type="text" onClick={logout}>
+            Logout
+          </Button>
+        }
+        trigger="hover"
       >
-        Logout
-      </Button>
+        <Space>
+          <Typography.Text strong style={{ color: "white" }}>
+            {user?.displayName}
+          </Typography.Text>
+          <Avatar size="large" icon={<UserOutlined />} src={user?.photoURL} />
+        </Space>
+      </Popover>
+    );
+  } else {
+    return (
+      <Space onClick={signInWithGoogle}>
+        <Typography.Text strong style={{ color: "white" }}>
+          Login with Google
+        </Typography.Text>
+        <Avatar size="large" icon={<GoogleOutlined />} />
+      </Space>
     );
   }
-
-  return (
-    <Button
-      type="primary"
-      size="large"
-      onClick={signInWithGoogle}
-      loading={loading}
-      icon={<LoginOutlined />}
-    >
-      Login with Google
-    </Button>
-  );
 }
