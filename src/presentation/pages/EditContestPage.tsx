@@ -4,6 +4,7 @@ import ContestName from "../components/ContestName";
 import ContestCategories from "../components/ContestCategories";
 import ContestQR from "../components/ContestQR";
 import ContestStats from "../components/ContestStats";
+import ContestSubmissions from "../components/ContestSubmissions";
 
 export default function EditContestPage() {
   return (
@@ -25,7 +26,7 @@ export default function EditContestPage() {
         </div>
       </Flex>
       <Divider orientation="left">Submissions</Divider>
-      TODO
+      <ContestSubmissions />
       <Divider orientation="left">Results</Divider>
       TODO
     </>
