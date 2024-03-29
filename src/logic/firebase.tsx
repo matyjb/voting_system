@@ -16,6 +16,7 @@ import {
   DocumentData,
   DocumentReference,
   serverTimestamp,
+  updateDoc,
 } from "firebase/firestore";
 import {
   TContest,
@@ -24,6 +25,7 @@ import {
   TScore,
 } from "../data/types";
 import { TContestVoter } from "../data/types/vote";
+import { FbRef } from "../data/types/fbref";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCWuI7P5Qi4oNmAGzTctcJMOwL8wksab6c",
@@ -69,10 +71,10 @@ const addContest = async (user: User, name: string) => {
   } as TContest);
 };
 
-const editContest = async (contest: TContest) => {
+const editContest = async (contest: Partial<TContest> & FbRef) => {
   console.log("editContest", contest);
   let { fbref, ...c } = contest;
-  await setDoc(contest.fbref, c);
+  await updateDoc(contest.fbref, c);
 };
 
 const removeContest = async (contest: TContest) => {
@@ -86,10 +88,10 @@ const addCategory = async (contest: TContest, name: string) => {
   await addDoc(collection(db, `${contest.fbref.path}/categories`), { name });
 };
 
-const editCategory = async (category: TContestCategory) => {
+const editCategory = async (category: Partial<TContestCategory> & FbRef) => {
   console.log("editCategory", category);
   let { fbref, ...c } = category;
-  await setDoc(category.fbref, c);
+  await updateDoc(category.fbref, c);
 };
 
 const removeCategory = async (category: TContestCategory) => {
@@ -112,10 +114,12 @@ const addSubmission = async (
   } as TContestSubmission);
 };
 
-const editSubmission = async (submission: TContestSubmission) => {
+const editSubmission = async (
+  submission: Partial<TContestSubmission> & FbRef
+) => {
   console.log("editSubmission", submission);
   let { fbref, ...s } = submission;
-  await setDoc(submission.fbref, s);
+  await updateDoc(submission.fbref, s);
 };
 
 const removeSubmission = async (submission: TContestSubmission) => {

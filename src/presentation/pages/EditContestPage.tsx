@@ -1,5 +1,5 @@
 import { Divider, Flex, Space } from "antd";
-import ContestPhaseIndicator from "../components/ContestPhaseIndicator";
+import ContestPhaseDropdown from "../components/ContestPhaseDropdown";
 import ContestName from "../components/ContestName";
 import ContestCategories from "../components/ContestCategories";
 import ContestQR from "../components/ContestQR";
@@ -11,7 +11,7 @@ export default function EditContestPage() {
     <>
       <Flex justify="space-between" align="start">
         <Space direction="vertical" style={{ width: "100%" }}>
-          <ContestPhaseIndicator />
+          <ContestPhaseDropdown />
           <ContestName />
         </Space>
         <ContestQR />
