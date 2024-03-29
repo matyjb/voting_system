@@ -10,15 +10,12 @@ import { FunctionComponent } from "react";
 import { TContestPhase } from "../../data/types";
 import { useContest } from "../../logic/contexts/ContestContext";
 import { CaretDownOutlined } from "@ant-design/icons";
+import { closeContest, openContest, startContest } from "../../logic/firebase";
 
 const badgeProps: { [key in TContestPhase]: BadgeProps } = {
   CLOSED: { color: "red", status: "default" },
   SUBMISSION: { color: "green", status: "processing" },
   VOTING: { color: "orange", status: "processing" },
-};
-
-const onClick: MenuProps["onClick"] = ({ key }) => {
-  console.log(key);
 };
 
 const items: MenuProps["items"] = [
@@ -46,6 +43,20 @@ const ContestPhaseDropdown: FunctionComponent<
 > = () => {
   const { contest } = useContest();
   const phaseProps = badgeProps[contest?.phase ?? "CLOSED"];
+
+  const onClick: MenuProps["onClick"] = ({ key }) => {
+    switch (key) {
+      case "CLOSED":
+        closeContest(contest!);
+        break;
+      case "SUBMISSION":
+        openContest(contest!);
+        break;
+      case "VOTING":
+        startContest(contest!);
+        break;
+    }
+  };
 
   const itms = items.filter((item) => item?.key !== contest?.phase);
 

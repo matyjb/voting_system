@@ -77,6 +77,22 @@ const editContest = async (contest: Partial<TContest> & FbRef) => {
   await updateDoc(contest.fbref, c);
 };
 
+const closeContest = async (contest: TContest) => {
+  console.log("closeContest", contest);
+  // TODO: Calculate results based on votes
+  await updateDoc(contest.fbref, { phase: "CLOSED" });
+};
+
+const openContest = async (contest: TContest) => {
+  console.log("openContest", contest);
+  await updateDoc(contest.fbref, { phase: "SUBMISSION" });
+};
+
+const startContest = async (contest: TContest) => {
+  console.log("startContest", contest);
+  await updateDoc(contest.fbref, { phase: "VOTING" });
+};
+
 const removeContest = async (contest: TContest) => {
   console.log("removeContest", contest);
   await deleteDoc(contest.fbref);
@@ -157,6 +173,9 @@ export {
   addContest,
   editContest,
   removeContest,
+  closeContest,
+  openContest,
+  startContest,
   addSubmission,
   editSubmission,
   removeSubmission,
