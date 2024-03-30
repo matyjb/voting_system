@@ -3,12 +3,13 @@ import { useContest } from "../../logic/contexts/ContestContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../logic/firebase";
 import { Button, QRCode, Space } from "antd";
+import { DownloadOutlined } from "@ant-design/icons";
 
 interface ContestQRProps {}
 
 const downloadQRCode = () => {
   const canvas = document
-    .getElementById("myqrcode")
+    .getElementById("contestQR")
     ?.querySelector<HTMLCanvasElement>("canvas");
   if (canvas) {
     const url = canvas.toDataURL();
@@ -30,9 +31,13 @@ const ContestQR: FunctionComponent<ContestQRProps> = () => {
   }`;
 
   return (
-    <Space direction="vertical" align="center">
+    <Space id="contestQR" direction="vertical" align="center">
       <QRCode value={contestUrl} />
-      <Button type="primary" onClick={downloadQRCode}>
+      <Button
+        type="primary"
+        icon={<DownloadOutlined />}
+        onClick={downloadQRCode}
+      >
         Download
       </Button>
     </Space>
