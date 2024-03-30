@@ -1,9 +1,19 @@
 import { FunctionComponent } from "react";
 import { useContest } from "../../logic/contexts/ContestContext";
-import { Avatar, Badge, Button, List, Modal, Space, Typography } from "antd";
+import {
+  Avatar,
+  Badge,
+  Button,
+  Flex,
+  List,
+  Modal,
+  Space,
+  Typography,
+} from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { editContest, removeSubmission } from "../../logic/firebase";
 import { TContestSubmission } from "../../data/types";
+import ContestStageControls from "./ContestStageControls";
 
 interface ContestSubmissionsProps {}
 
@@ -44,10 +54,29 @@ const ContestSubmissions: FunctionComponent<ContestSubmissionsProps> = () => {
     });
   };
 
+  const onStage = submissions?.find(
+    (s) => s.fbref.path === contest?.onStageRef?.path
+  );
+
   return (
     <>
       <List
         bordered
+        header={
+          <Flex justify="space-between" align="center">
+            <Typography.Text strong>On stage:</Typography.Text>
+            {onStage && (
+              <Space>
+                <Avatar src={onStage.logoUrl} icon={<UserOutlined />} />
+                <Typography>
+                  <Typography.Text strong>{onStage.gameTitle}</Typography.Text>
+                  <Typography.Text> by {onStage.teamName}</Typography.Text>
+                </Typography>
+              </Space>
+            )}
+            <ContestStageControls />
+          </Flex>
+        }
         dataSource={submissions}
         renderItem={(item) => (
           <List.Item

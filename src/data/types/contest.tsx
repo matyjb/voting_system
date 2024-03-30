@@ -6,5 +6,5 @@ export type TContest = {
   logoUrl?: string;
   name: string;
   phase: TContestPhase;
-  onStageRef?: DocumentReference<DocumentData, DocumentData>;
+  onStageRef?: DocumentReference<DocumentData, DocumentData> | null;
 } & FbRef;
