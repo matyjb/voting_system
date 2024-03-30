@@ -1,14 +1,14 @@
 import { FunctionComponent } from "react";
 import { useContest } from "../../logic/contexts/ContestContext";
-import { Avatar, Button, List, Modal, Space, Typography } from "antd";
+import { Avatar, Badge, Button, List, Modal, Space, Typography } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import { removeSubmission } from "../../logic/firebase";
+import { editContest, removeSubmission } from "../../logic/firebase";
 import { TContestSubmission } from "../../data/types";
 
 interface ContestSubmissionsProps {}
 
 const ContestSubmissions: FunctionComponent<ContestSubmissionsProps> = () => {
-  const { submissions } = useContest();
+  const { contest, submissions } = useContest();
   const [modal, contextHolder] = Modal.useModal();
 
   const handleRemoveSubmissions = async (submissions: TContestSubmission) => {
@@ -37,6 +37,13 @@ const ContestSubmissions: FunctionComponent<ContestSubmissionsProps> = () => {
     }
   };
 
+  const handleSetOnStage = (submission: TContestSubmission) => {
+    editContest({
+      onStageRef: submission.fbref,
+      fbref: contest!.fbref,
+    });
+  };
+
   return (
     <>
       <List
@@ -46,6 +53,16 @@ const ContestSubmissions: FunctionComponent<ContestSubmissionsProps> = () => {
           <List.Item
             style={{ margin: 2, paddingTop: 2, paddingBottom: 2 }}
             actions={[
+              contest?.onStageRef?.path !== item.fbref.path ? (
+                <Button type="link" onClick={() => handleSetOnStage(item)}>
+                  set on stage
+                </Button>
+              ) : (
+                <Space>
+                  <Badge status="processing" />
+                  <Typography.Text>on stage</Typography.Text>
+                </Space>
+              ),
               <Button
                 type="link"
                 danger
