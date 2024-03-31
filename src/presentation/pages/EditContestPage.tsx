@@ -1,10 +1,11 @@
-import { Divider, Flex, Space } from "antd";
+import { Button, Divider, Flex, Space } from "antd";
 import ContestPhaseDropdown from "../components/ContestPhaseDropdown";
 import ContestName from "../components/ContestName";
 import ContestCategories from "../components/ContestCategories";
 import ContestQR from "../components/ContestQR";
 import ContestStats from "../components/ContestStats";
 import ContestSubmissions from "../components/ContestSubmissions";
+import { TrophyOutlined } from "@ant-design/icons";
 
 export default function EditContestPage() {
   return (
@@ -13,6 +14,9 @@ export default function EditContestPage() {
         <Space direction="vertical" style={{ width: "100%" }}>
           <ContestPhaseDropdown />
           <ContestName />
+          <Button type="primary" icon={<TrophyOutlined />}>
+            Show results
+          </Button>
         </Space>
         <ContestQR />
       </Flex>
@@ -27,8 +31,6 @@ export default function EditContestPage() {
       </Flex>
       <Divider orientation="left">Submissions</Divider>
       <ContestSubmissions />
-      <Divider orientation="left">Results</Divider>
-      TODO
     </>
   );
 }
