@@ -2,9 +2,15 @@ import { auth, logout, signInWithGoogle } from "../../logic/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Avatar, Button, Popover, Space, Typography } from "antd";
 import { UserOutlined, GoogleOutlined } from "@ant-design/icons";
-import { useEffect } from "react";
+import { FunctionComponent, useEffect } from "react";
 
-export default function GoogleLoginButton() {
+interface GoogleLoginButtonProps {
+  style?: React.CSSProperties;
+}
+
+const GoogleLoginButton: FunctionComponent<GoogleLoginButtonProps> = ({
+  style,
+}) => {
   const [user, , error] = useAuthState(auth);
 
   useEffect(() => {
@@ -24,7 +30,7 @@ export default function GoogleLoginButton() {
         trigger="hover"
       >
         <Space>
-          <Typography.Text strong style={{ color: "white" }}>
+          <Typography.Text strong style={style}>
             {user?.displayName}
           </Typography.Text>
           <Avatar size="large" icon={<UserOutlined />} src={user?.photoURL} />
@@ -34,11 +40,13 @@ export default function GoogleLoginButton() {
   } else {
     return (
       <Space onClick={signInWithGoogle}>
-        <Typography.Text strong style={{ color: "white" }}>
+        <Typography.Text strong style={style}>
           Login with Google
         </Typography.Text>
         <Avatar size="large" icon={<GoogleOutlined />} />
       </Space>
     );
   }
-}
+};
+
+export default GoogleLoginButton;
