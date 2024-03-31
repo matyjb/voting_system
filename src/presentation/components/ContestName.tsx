@@ -16,6 +16,10 @@ const ContestName: FunctionComponent<ContestNameProps> = () => {
     }
   }, [name]);
 
+  useEffect(() => {
+    setName(contest?.name || "");
+  }, [contest?.name]);
+
   return (
     <Typography.Title
       editable={{

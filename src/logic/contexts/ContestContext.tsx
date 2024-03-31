@@ -88,7 +88,7 @@ export const ContestProvider: FunctionComponent<ContestProviderProps> = ({
       unsubSubmissions();
       unsubVoters();
     };
-  }, [user]);
+  }, [user, contest.fbref]);
 
   return (
     <ContestContext.Provider
