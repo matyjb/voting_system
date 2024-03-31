@@ -10,6 +10,7 @@ import GoogleLoginButton from "../components/GoogleLoginButton";
 import MenuItem from "antd/es/menu/MenuItem";
 import CreateContestModalButton from "../components/CreateContestModalButton";
 import { ContestProvider } from "../../logic/contexts/ContestContext";
+import ThemeToggle from "../components/ThemeToggle";
 
 const { Sider, Header, Content } = Layout;
 const logoUrl =
@@ -75,7 +76,10 @@ export default function ContestsMenu() {
             Voting System
           </Typography.Title>
         </Space>
-        <GoogleLoginButton />
+        <Space>
+          <ThemeToggle />
+          <GoogleLoginButton />
+        </Space>
       </Header>
       <Layout hasSider>
         <Sider
@@ -92,7 +96,6 @@ export default function ContestsMenu() {
             My contests
           </Typography.Title>
           <Menu
-            theme="dark"
             mode="inline"
             items={items}
             selectedKeys={
