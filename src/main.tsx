@@ -7,6 +7,9 @@ import EditContestPage from "./presentation/pages/EditContestPage.tsx";
 import ContestPage from "./presentation/pages/ContestPage.tsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
+import LoginPage from "./presentation/pages/LoginPage.tsx";
+import RequireAuth from "./presentation/components/RequireAuth.tsx";
+import { ConfigProvider, theme } from "antd";
 
 const router = createBrowserRouter([
   {
@@ -15,23 +18,55 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
     path: "/edit",
-    element: <ContestsMenu />,
+    element: (
+      <RequireAuth>
+        <ContestsMenu />
+      </RequireAuth>
+    ),
     children: [
       {
         path: ":contestId",
-        element: <EditContestPage />,
+        element: (
+          <RequireAuth>
+            <EditContestPage />
+          </RequireAuth>
+        ),
       },
     ],
   },
   {
     path: "/:orgId/:contestId",
-    element: <ContestPage />,
+    element: (
+      <RequireAuth>
+        <ContestPage />
+      </RequireAuth>
+    ),
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ConfigProvider
+      theme={{
+        algorithm: theme.darkAlgorithm,
+        token: {
+          colorPrimary: "#d48806",
+          colorBgBase: "#141414",
+        },
+        components: {
+          Layout: {
+            colorBgHeader: "#1f1f1f",
+            siderBg: "#1f1f1f",
+          },
+        },
+      }}
+    >
+      <RouterProvider router={router} />
+    </ConfigProvider>
   </React.StrictMode>
 );

@@ -71,7 +71,7 @@ export default function ContestsMenu() {
       >
         <Space>
           <Avatar src={logoUrl} />
-          <Typography.Title level={3} style={{ color: "white", margin: 0 }}>
+          <Typography.Title level={3} style={{ margin: 0 }}>
             Voting System
           </Typography.Title>
         </Space>
@@ -88,10 +88,7 @@ export default function ContestsMenu() {
             bottom: 0,
           }}
         >
-          <Typography.Title
-            level={5}
-            style={{ color: "white", margin: "16px 4px" }}
-          >
+          <Typography.Title level={5} style={{ margin: "16px 4px" }}>
             My contests
           </Typography.Title>
           <Menu
