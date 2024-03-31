@@ -2,6 +2,7 @@ import { Button, Input, Modal } from "antd";
 import { FunctionComponent, useState } from "react";
 import { addContest, auth } from "../../logic/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { PlusOutlined } from "@ant-design/icons";
 
 interface CreateContestModalButtonProps {}
 
@@ -29,7 +30,20 @@ const CreateContestModalButton: FunctionComponent<
 
   return (
     <>
-      <Button type="primary" onClick={() => setOpen(!open)} size="large">
+      <Button
+        type="dashed"
+        style={{
+          backgroundColor: "transparent",
+          color: "white",
+          width: "calc(100% - 8px)",
+          margin: 4,
+          textAlign: "left",
+          padding: "0px 24px",
+        }}
+        onClick={() => setOpen(!open)}
+        size="large"
+        icon={<PlusOutlined />}
+      >
         Create contest
       </Button>
       <Modal
