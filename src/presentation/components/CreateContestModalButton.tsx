@@ -33,8 +33,6 @@ const CreateContestModalButton: FunctionComponent<
       <Button
         type="dashed"
         style={{
-          backgroundColor: "transparent",
-          color: "white",
           width: "calc(100% - 8px)",
           margin: 4,
           textAlign: "left",
