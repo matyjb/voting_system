@@ -1,4 +1,10 @@
-import { FunctionComponent, createContext, useContext, useState } from "react";
+import {
+  FunctionComponent,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 const ThemeModeContext = createContext<{
   mode: "light" | "dark";
@@ -18,9 +24,28 @@ export const ThemeModeProvider: FunctionComponent<ThemeModeProviderProps> = ({
 }) => {
   const [mode, setMode] = useState<"light" | "dark">("light");
 
-  const toggleThemeMode = () => {
-    setMode(mode === "light" ? "dark" : "light");
+  const setThemeMode = (themeMode: "light" | "dark") => {
+    setMode(themeMode);
+    localStorage.setItem("themeMode", themeMode);
   };
+
+  const toggleThemeMode = () => {
+    setThemeMode(mode === "light" ? "dark" : "light");
+  };
+
+  useEffect(() => {
+    const themeMode = localStorage.getItem("themeMode");
+    if (themeMode === "light" || themeMode === "dark") {
+      setThemeMode(themeMode);
+    } else {
+      const prefersDarkMode = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      if (prefersDarkMode) {
+        setThemeMode("dark");
+      }
+    }
+  }, []);
 
   return (
     <ThemeModeContext.Provider
