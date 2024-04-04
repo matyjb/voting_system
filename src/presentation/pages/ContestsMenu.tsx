@@ -1,16 +1,12 @@
-import { useEffect, useState } from "react";
 import { ExperimentOutlined } from "@ant-design/icons";
 import { Avatar, Layout, Menu, MenuProps, Space, Typography } from "antd";
-import { Outlet, useNavigate, useParams } from "react-router-dom";
-import { auth, db } from "../../logic/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { collection, onSnapshot } from "@firebase/firestore";
-import { TContest } from "../../data/types";
+import { Outlet, useNavigate } from "react-router-dom";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import MenuItem from "antd/es/menu/MenuItem";
 import CreateContestModalButton from "../components/CreateContestModalButton";
-import { ContestProvider } from "../../logic/contexts/ContestContext";
 import ThemeToggle from "../components/ThemeToggle";
+import { useContests } from "../../logic/contexts/ContestsContext";
+import { useContestData } from "../../logic/contexts/ContestDataContext";
 
 const { Sider, Header, Content } = Layout;
 const logoUrl =
@@ -19,28 +15,9 @@ const logoUrl =
 type MenuItem = Required<MenuProps>["items"][number];
 
 export default function ContestsMenu() {
-  const [user] = useAuthState(auth);
-  const [contests, setContests] = useState<TContest[]>([]);
-  const { contestId } = useParams();
+  const { contests } = useContests();
+  const { contest } = useContestData();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    if (!user) return;
-    const unsubscribe = onSnapshot(
-      collection(db, `users/${user.uid}/contests`),
-      (docs) => {
-        const docsData: TContest[] = [];
-        docs.forEach((doc) => {
-          docsData.push({ ...(doc.data() as TContest), fbref: doc.ref });
-        });
-        setContests(docsData);
-      }
-    );
-
-    return () => {
-      unsubscribe();
-    };
-  }, [user]);
 
   const items: MenuItem[] = contests.map((contest) => {
     return {
@@ -54,8 +31,6 @@ export default function ContestsMenu() {
       label: contest.name,
     } as MenuItem;
   });
-
-  const currentlyViewedContest = contests.find((c) => c.fbref.id === contestId);
 
   return (
     <Layout>
@@ -98,9 +73,7 @@ export default function ContestsMenu() {
           <Menu
             mode="inline"
             items={items}
-            selectedKeys={
-              currentlyViewedContest ? [currentlyViewedContest.fbref.id] : []
-            }
+            selectedKeys={contest ? [contest.fbref.id] : []}
           />
           <CreateContestModalButton />
         </Sider>
@@ -108,11 +81,7 @@ export default function ContestsMenu() {
           <Content
             style={{ padding: "12px 48px", height: "calc(100vh - 64px)" }}
           >
-            {currentlyViewedContest && (
-              <ContestProvider contest={currentlyViewedContest}>
-                <Outlet />
-              </ContestProvider>
-            )}
+            <Outlet />
           </Content>
         </Layout>
       </Layout>

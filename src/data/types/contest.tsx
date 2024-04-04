@@ -1,10 +1,10 @@
 import { TContestPhase } from "./phase";
 import { FbRef } from "./fbref";
-import { DocumentData, DocumentReference } from "firebase/firestore";
+import { TDocRef } from ".";
 
 export type TContest = {
   logoUrl?: string;
   name: string;
   phase: TContestPhase;
-  onStageRef?: DocumentReference<DocumentData, DocumentData> | null;
+  onStageRef?: TDocRef | null;
 } & FbRef;

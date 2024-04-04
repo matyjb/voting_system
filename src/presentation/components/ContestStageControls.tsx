@@ -5,15 +5,15 @@ import {
 } from "@ant-design/icons";
 import { Button, Tooltip } from "antd";
 import { FunctionComponent } from "react";
-import { useContest } from "../../logic/contexts/ContestContext";
 import { editContest } from "../../logic/firebase";
+import { useContestData } from "../../logic/contexts/ContestDataContext";
 
 interface ContestStageControlsProps {}
 
 const ContestStageControls: FunctionComponent<
   ContestStageControlsProps
 > = () => {
-  const { contest, submissions } = useContest();
+  const { contest, submissions } = useContestData();
 
   const currentOnStageIndex =
     submissions?.findIndex((s) => s.fbref.path === contest?.onStageRef?.path) ??

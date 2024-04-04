@@ -13,8 +13,6 @@ import {
   addDoc,
   collection,
   deleteDoc,
-  DocumentData,
-  DocumentReference,
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
@@ -22,6 +20,7 @@ import {
   TContest,
   TContestCategory,
   TContestSubmission,
+  TDocRef,
   TScore,
 } from "../data/types";
 import { TContestVoter } from "../data/types/vote";
@@ -147,7 +146,7 @@ const removeSubmission = async (submission: TContestSubmission) => {
 async function addVoter(
   contest: TContest,
   scores: TScore[],
-  voterTeamRef?: DocumentReference<DocumentData, DocumentData>
+  voterTeamRef?: TDocRef
 ) {
   console.log("addVoter", contest, scores, voterTeamRef);
   await addDoc(collection(db, `${contest.fbref.path}/voters`), {

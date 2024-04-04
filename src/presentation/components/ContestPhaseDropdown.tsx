@@ -8,9 +8,9 @@ import {
 } from "antd";
 import { FunctionComponent } from "react";
 import { TContestPhase } from "../../data/types";
-import { useContest } from "../../logic/contexts/ContestContext";
 import { CaretDownOutlined } from "@ant-design/icons";
 import { closeContest, openContest, startContest } from "../../logic/firebase";
+import { useContestData } from "../../logic/contexts/ContestDataContext";
 
 const badgeProps: { [key in TContestPhase]: BadgeProps } = {
   CLOSED: { color: "red", status: "default" },
@@ -41,7 +41,7 @@ interface ContestPhaseDropdownProps {}
 const ContestPhaseDropdown: FunctionComponent<
   ContestPhaseDropdownProps
 > = () => {
-  const { contest } = useContest();
+  const { contest } = useContestData();
   const phaseProps = badgeProps[contest?.phase ?? "CLOSED"];
 
   const onClick: MenuProps["onClick"] = ({ key }) => {

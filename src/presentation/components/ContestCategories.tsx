@@ -1,14 +1,14 @@
 import { FunctionComponent, useState } from "react";
-import { useContest } from "../../logic/contexts/ContestContext";
 import { Button, Input, List, Modal, Space, Typography } from "antd";
 import { PlusOutlined } from "@ant-design/icons";
 import { addCategory, removeCategory } from "../../logic/firebase";
 import { TContestCategory } from "../../data/types";
+import { useContestData } from "../../logic/contexts/ContestDataContext";
 
 interface ContestCategoriesProps {}
 
 const ContestCategories: FunctionComponent<ContestCategoriesProps> = () => {
-  const { contest, categories } = useContest();
+  const { contest, categories } = useContestData();
   const [newCategoryName, setNewCategoryName] = useState<string>("");
   const [modal, contextHolder] = Modal.useModal();
 

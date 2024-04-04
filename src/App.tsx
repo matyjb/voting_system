@@ -1,6 +1,6 @@
 import { ConfigProvider, theme } from "antd";
 import { FunctionComponent } from "react";
-import { RouterProvider } from "react-router";
+import { RouterProvider, useParams } from "react-router";
 import { createBrowserRouter } from "react-router-dom";
 import RequireAuth from "./presentation/components/RequireAuth";
 import ContestPage from "./presentation/pages/ContestPage";
@@ -10,6 +10,44 @@ import ErrorPage from "./presentation/pages/ErrorPage";
 import LandingPage from "./presentation/pages/LandingPage";
 import LoginPage from "./presentation/pages/LoginPage";
 import { useThemeMode } from "./logic/contexts/ThemeModeContext";
+import { ContestsProvider } from "./logic/contexts/ContestsContext";
+import { auth, db } from "./logic/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { doc } from "@firebase/firestore";
+import {
+  ContestDataProvider,
+  ContestDataProviderConfig,
+} from "./logic/contexts/ContestDataContext";
+
+const ProvideContests: FunctionComponent<{ children: JSX.Element }> = ({
+  children,
+}) => {
+  const { userId } = useParams();
+  const [user] = useAuthState(auth);
+
+  return (
+    <ContestsProvider
+      userRef={
+        userId ? doc(db, `users/${userId}`) : doc(db, `users/${user?.uid}`)
+      }
+    >
+      {children}
+    </ContestsProvider>
+  );
+};
+
+const ProvideContestData: FunctionComponent<
+  { children: JSX.Element } & ContestDataProviderConfig
+> = (props) => {
+  const { userId, contestId } = useParams();
+  const [user] = useAuthState(auth);
+
+  const userIdd = userId || user?.uid;
+
+  const contestRef = doc(db, `users/${userIdd}/contests/${contestId}`);
+
+  return <ContestDataProvider {...props} contestRef={contestRef} />;
+};
 
 const router = createBrowserRouter([
   {
@@ -25,25 +63,29 @@ const router = createBrowserRouter([
     path: "/edit",
     element: (
       <RequireAuth>
-        <ContestsMenu />
+        <ProvideContests>
+          <ContestsMenu />
+        </ProvideContests>
       </RequireAuth>
     ),
     children: [
       {
         path: ":contestId",
         element: (
-          <RequireAuth>
+          <ProvideContestData>
             <EditContestPage />
-          </RequireAuth>
+          </ProvideContestData>
         ),
       },
     ],
   },
   {
-    path: "/:orgId/:contestId",
+    path: "/:userId/:contestId",
     element: (
       <RequireAuth>
-        <ContestPage />
+        <ProvideContestData noSubmissions noVoters>
+          <ContestPage />
+        </ProvideContestData>
       </RequireAuth>
     ),
   },

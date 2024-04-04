@@ -1,12 +1,12 @@
 import { Space, Statistic } from "antd";
 import { FunctionComponent } from "react";
 import { DislikeOutlined, LikeOutlined, StarOutlined } from "@ant-design/icons";
-import { useContest } from "../../logic/contexts/ContestContext";
+import { useContestData } from "../../logic/contexts/ContestDataContext";
 
 interface ContestStatsProps {}
 
 const ContestStats: FunctionComponent<ContestStatsProps> = () => {
-  const { submissions, voters } = useContest();
+  const { submissions, voters } = useContestData();
   return (
     <Space direction="vertical">
       <Statistic

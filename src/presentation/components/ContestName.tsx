@@ -1,13 +1,13 @@
 import { FunctionComponent, useEffect } from "react";
-import { useContest } from "../../logic/contexts/ContestContext";
 import { Typography } from "antd";
 import { editContest } from "../../logic/firebase";
 import useTextState from "../hooks/useTextState";
+import { useContestData } from "../../logic/contexts/ContestDataContext";
 
 interface ContestNameProps {}
 
 const ContestName: FunctionComponent<ContestNameProps> = () => {
-  const { contest } = useContest();
+  const { contest } = useContestData();
   const [name, setName] = useTextState(contest?.name);
 
   useEffect(() => {

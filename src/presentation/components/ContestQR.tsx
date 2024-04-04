@@ -1,9 +1,9 @@
 import { FunctionComponent } from "react";
-import { useContest } from "../../logic/contexts/ContestContext";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../logic/firebase";
 import { Button, QRCode, Space } from "antd";
 import { DownloadOutlined } from "@ant-design/icons";
+import { useContestData } from "../../logic/contexts/ContestDataContext";
 
 interface ContestQRProps {}
 
@@ -23,7 +23,7 @@ const downloadQRCode = () => {
 };
 
 const ContestQR: FunctionComponent<ContestQRProps> = () => {
-  const { contest } = useContest();
+  const { contest } = useContestData();
   const [user] = useAuthState(auth);
 
   const contestUrl = `${window.location.origin}/${user!.uid}/${

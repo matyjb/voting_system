@@ -6,8 +6,15 @@ import ContestQR from "../components/ContestQR";
 import ContestStats from "../components/ContestStats";
 import ContestSubmissions from "../components/ContestSubmissions";
 import { TrophyOutlined } from "@ant-design/icons";
+import { useContestData } from "../../logic/contexts/ContestDataContext";
 
 export default function EditContestPage() {
+  const { contest } = useContestData();
+
+  if (!contest) {
+    return <></>;
+  }
+
   return (
     <>
       <Flex justify="space-between" align="start">

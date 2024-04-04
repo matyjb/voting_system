@@ -1,5 +1,5 @@
-import { DocumentData, DocumentReference } from "@firebase/firestore";
+import { TDocRef } from ".";
 
 export type FbRef = {
-  fbref: DocumentReference<DocumentData, DocumentData>;
+  fbref: TDocRef;
 };

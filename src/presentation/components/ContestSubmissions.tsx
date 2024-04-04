@@ -1,5 +1,4 @@
 import { FunctionComponent } from "react";
-import { useContest } from "../../logic/contexts/ContestContext";
 import {
   Avatar,
   Badge,
@@ -14,11 +13,12 @@ import { UserOutlined } from "@ant-design/icons";
 import { editContest, removeSubmission } from "../../logic/firebase";
 import { TContestSubmission } from "../../data/types";
 import ContestStageControls from "./ContestStageControls";
+import { useContestData } from "../../logic/contexts/ContestDataContext";
 
 interface ContestSubmissionsProps {}
 
 const ContestSubmissions: FunctionComponent<ContestSubmissionsProps> = () => {
-  const { contest, submissions } = useContest();
+  const { contest, submissions } = useContestData();
   const [modal, contextHolder] = Modal.useModal();
 
   const handleRemoveSubmissions = async (submissions: TContestSubmission) => {
