@@ -60,7 +60,7 @@ export default function ContestsMenu() {
         <Sider
           style={{
             overflow: "auto",
-            height: "100vh",
+            minHeight: "100vh",
             position: "fixed",
             left: 0,
             top: 64,

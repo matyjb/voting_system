@@ -125,7 +125,7 @@ const addSubmission = async (
   await addDoc(collection(db, `${contest.fbref.path}/submissions`), {
     gameTitle,
     teamName,
-    logoUrl,
+    logoUrl: logoUrl || null,
   } as TContestSubmission);
 };
 

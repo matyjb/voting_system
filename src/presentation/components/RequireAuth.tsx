@@ -18,7 +18,7 @@ const RequireAuth: FunctionComponent<RequireAuthProps> = ({ children }) => {
       <Layout>
         <Content
           style={{
-            height: "100vh",
+            minHeight: "100vh",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
