@@ -16,6 +16,7 @@ import { Content } from "antd/es/layout/layout";
 import { FunctionComponent, useState } from "react";
 import { addSubmission } from "../../logic/firebase";
 import { useContestData } from "../../logic/contexts/ContestDataContext";
+import GoogleLoginButton from "../components/GoogleLoginButton";
 
 type FieldType = {
   teamName?: string;
@@ -69,10 +70,13 @@ const ContestAddSubmissionPage: FunctionComponent = () => {
   return (
     <>
       {contextHolder}
-      <Layout>
+      <Layout
+        style={{
+          minHeight: "100vh",
+        }}
+      >
         <Content
           style={{
-            minHeight: "100vh",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -93,7 +97,6 @@ const ContestAddSubmissionPage: FunctionComponent = () => {
                 <Typography.Title level={3}>{contest?.name}</Typography.Title>
               </Space>
             </Card>
-
             <Card title="Add Submission">
               <Form
                 name="game submit"
@@ -146,6 +149,9 @@ const ContestAddSubmissionPage: FunctionComponent = () => {
                 </Form.Item>
               </Form>
             </Card>
+            <div style={{ textAlign: "center", width: "100%" }}>
+              <GoogleLoginButton />
+            </div>
           </Space>
         </Content>
       </Layout>
