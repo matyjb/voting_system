@@ -44,15 +44,8 @@ const ContestAddSubmissionPage: FunctionComponent = () => {
 
   if (status === "success") {
     return (
-      <Layout>
-        <Content
-          style={{
-            minHeight: "100vh",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+      <Layout className="fill-height">
+        <Content className="center">
           <Result
             status="success"
             title={`Successfully added submittion to ${contest?.name}!`}
@@ -70,18 +63,8 @@ const ContestAddSubmissionPage: FunctionComponent = () => {
   return (
     <>
       {contextHolder}
-      <Layout
-        style={{
-          minHeight: "100vh",
-        }}
-      >
-        <Content
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
+      <Layout className="fill-height">
+        <Content className="center">
           <Space direction="vertical">
             <Card>
               <Space

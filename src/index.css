@@ -12,6 +12,16 @@ code {
     monospace;
 }
 
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.fill-height {
+  min-height: 100vh;
+}
+
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;

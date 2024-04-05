@@ -33,7 +33,7 @@ export default function ContestsMenu() {
   });
 
   return (
-    <Layout>
+    <Layout className="fill-height">
       <Header
         style={{
           position: "sticky",
@@ -41,7 +41,6 @@ export default function ContestsMenu() {
           zIndex: 1,
           width: "100%",
           display: "flex",
-          alignItems: "center",
           justifyContent: "space-between",
         }}
       >
@@ -60,7 +59,6 @@ export default function ContestsMenu() {
         <Sider
           style={{
             overflow: "auto",
-            minHeight: "100vh",
             position: "fixed",
             left: 0,
             top: 64,
@@ -78,9 +76,7 @@ export default function ContestsMenu() {
           <CreateContestModalButton />
         </Sider>
         <Layout style={{ marginLeft: 200 }}>
-          <Content
-            style={{ padding: "12px 48px", height: "calc(100vh - 64px)" }}
-          >
+          <Content style={{ padding: "12px 48px" }}>
             <Outlet />
           </Content>
         </Layout>

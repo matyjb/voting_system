@@ -21,41 +21,26 @@ const LoginPage: FunctionComponent<LoginPageProps> = () => {
   }, [user]);
 
   return (
-    <Layout>
-      <Content>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignContent: "center",
-            minHeight: "100vh",
-          }}
+    <Layout className="fill-height">
+      <Content className="center">
+        <Card
+          hoverable
+          style={{ width: 240, textAlign: "center" }}
+          onClick={signInWithGoogle}
+          cover={
+            <LoginOutlined
+              style={{
+                fontSize: 64,
+                margin: "64px 12px",
+                width: "auto",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            />
+          }
         >
-          <div style={{ alignContent: "center" }}>
-            <Card
-              hoverable
-              style={{ width: 240 }}
-              onClick={signInWithGoogle}
-              cover={
-                <div
-                  style={{
-                    fontSize: 64,
-                    margin: "64px 12px",
-                    width: "auto",
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  <LoginOutlined />
-                </div>
-              }
-            >
-              <div style={{ textAlign: "center" }}>
-                <GoogleLoginButton />
-              </div>
-            </Card>
-          </div>
-        </div>
+          <GoogleLoginButton />
+        </Card>
       </Content>
     </Layout>
   );
