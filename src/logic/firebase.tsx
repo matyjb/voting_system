@@ -115,14 +115,14 @@ const removeCategory = async (category: TContestCategory) => {
 };
 
 //* SUBMISSIONS
-const addSubmission = async (
+const addSubmission = (
   contest: TContest,
   gameTitle: string,
   teamName: string,
   logoUrl?: string
 ) => {
   console.log("addSubmission", contest, gameTitle, teamName, logoUrl);
-  await addDoc(collection(db, `${contest.fbref.path}/submissions`), {
+  return addDoc(collection(db, `${contest.fbref.path}/submissions`), {
     gameTitle,
     teamName,
     logoUrl: logoUrl || null,
