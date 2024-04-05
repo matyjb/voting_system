@@ -28,7 +28,7 @@ const LoginPage: FunctionComponent<LoginPageProps> = () => {
             display: "flex",
             justifyContent: "center",
             alignContent: "center",
-            height: "100vh",
+            minHeight: "100vh",
           }}
         >
           <div style={{ alignContent: "center" }}>

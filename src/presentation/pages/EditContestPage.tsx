@@ -7,9 +7,14 @@ import ContestStats from "../components/ContestStats";
 import ContestSubmissions from "../components/ContestSubmissions";
 import { TrophyOutlined } from "@ant-design/icons";
 import { useContestData } from "../../logic/contexts/ContestDataContext";
+import { useNavigate } from "react-router";
+import { auth } from "../../logic/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
 
 export default function EditContestPage() {
   const { contest } = useContestData();
+  const [user] = useAuthState(auth);
+  const navigate = useNavigate();
 
   if (!contest) {
     return <></>;
@@ -21,7 +26,11 @@ export default function EditContestPage() {
         <Space direction="vertical" style={{ width: "100%" }}>
           <ContestPhaseDropdown />
           <ContestName />
-          <Button type="primary" icon={<TrophyOutlined />}>
+          <Button
+            type="primary"
+            icon={<TrophyOutlined />}
+            onClick={() => navigate(`/${user?.uid}/${contest.fbref.id}`)}
+          >
             Show results
           </Button>
         </Space>
