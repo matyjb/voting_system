@@ -1,17 +1,31 @@
 import { useContestData } from "../../logic/contexts/ContestDataContext";
 import { FunctionComponent } from "react";
 import ContestAddSubmissionPage from "./ContestAddSubmissionPage";
+import ContestVotePage from "./voter";
+import { ProvideContestData } from "../../logic/ProvideContestData";
 
 const ContestPage: FunctionComponent = () => {
   const { contest } = useContestData();
 
   switch (contest?.phase) {
     case "CLOSED":
-      return <h1>Contest Closed</h1>;
+      return (
+        <ProvideContestData noSubmissions noCategories noVoters>
+          <h1>Contest Closed</h1>
+        </ProvideContestData>
+      );
     case "SUBMISSION":
-      return <ContestAddSubmissionPage />;
+      return (
+        <ProvideContestData noSubmissions noVoters>
+          <ContestAddSubmissionPage />
+        </ProvideContestData>
+      );
     case "VOTING":
-      return <h1>Contest Voting</h1>;
+      return (
+        <ProvideContestData noVoters>
+          <ContestVotePage />
+        </ProvideContestData>
+      );
   }
 };
 
