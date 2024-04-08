@@ -9,6 +9,7 @@ export enum VoterActionType {
   VOTE_TEAM = "VOTE_TEAM",
   SELECT_TEAM = "SELECT_TEAM",
   DESELECT_TEAM = "DESELECT_TEAM",
+  SKIP_VOTE = "SKIP_VOTE",
 }
 
 type TTempScore = { teamId: string; categoryId: string; score: number };
@@ -20,7 +21,7 @@ interface VoteTeamAction {
 
 interface SelectTeamAction {
   type: VoterActionType.SELECT_TEAM;
-  payload: string;
+  payload: { teamId: string };
 }
 
 interface DeselectTeamAction {
@@ -28,7 +29,16 @@ interface DeselectTeamAction {
   payload: undefined;
 }
 
-type VoterAction = VoteTeamAction | SelectTeamAction | DeselectTeamAction;
+interface SkipVoteAction {
+  type: VoterActionType.SKIP_VOTE;
+  payload: { teamId: string; categoryId: string };
+}
+
+type VoterAction =
+  | VoteTeamAction
+  | SelectTeamAction
+  | DeselectTeamAction
+  | SkipVoteAction;
 
 interface TVoterState {
   voterTeamId?: string;
@@ -58,10 +68,23 @@ function voterReducer(state: TVoterState, action: VoterAction) {
           },
         },
       };
+    case VoterActionType.SKIP_VOTE:
+      let {
+        [payload.teamId]: { [payload.categoryId]: _, ...newScores },
+        ...restTeams
+      } = state.scores;
+
+      return {
+        ...state,
+        scores: {
+          ...restTeams,
+          [payload.teamId]: newScores,
+        },
+      };
     case VoterActionType.SELECT_TEAM:
       return {
         ...state,
-        voterTeamId: payload,
+        voterTeamId: payload.teamId,
       };
     case VoterActionType.DESELECT_TEAM:
       return {

@@ -59,7 +59,7 @@ const SelectYourTeamCard: FunctionComponent<SelectYourTeamCardProps> = ({
           onChange={(value) => {
             dispatch({
               type: VoterActionType.SELECT_TEAM,
-              payload: value,
+              payload: { teamId: value },
             });
           }}
         />
