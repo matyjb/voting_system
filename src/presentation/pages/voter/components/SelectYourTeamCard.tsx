@@ -3,7 +3,13 @@ import { useContestData } from "../../../../logic/contexts/ContestDataContext";
 import { Card, Space, Button, Divider, Select } from "antd";
 import { VoterActionType, useVoterState } from "./VoterContext";
 
-const SelectYourTeamCard: FunctionComponent = () => {
+interface SelectYourTeamCardProps {
+  onComplete: () => void;
+}
+
+const SelectYourTeamCard: FunctionComponent<SelectYourTeamCardProps> = ({
+  onComplete,
+}) => {
   const {
     state: { voterTeamId },
     dispatch,
@@ -22,7 +28,7 @@ const SelectYourTeamCard: FunctionComponent = () => {
   ) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   return (
-    <Card title="Select your team" style={{ minWidth: 300 }}>
+    <Card title="Select your team" style={{ maxWidth: 300, width: "100%" }}>
       <Space direction="vertical" style={{ width: "100%" }}>
         <Select
           showSearch
@@ -57,7 +63,7 @@ const SelectYourTeamCard: FunctionComponent = () => {
             });
           }}
         />
-        <Button type="primary" style={{ width: "100%" }}>
+        <Button type="primary" style={{ width: "100%" }} onClick={onComplete}>
           Next
         </Button>
       </Space>

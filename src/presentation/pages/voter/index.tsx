@@ -1,14 +1,16 @@
 import { Layout, Menu, Typography } from "antd";
 import { Content, Header } from "antd/es/layout/layout";
-import { FunctionComponent } from "react";
+import { FunctionComponent, useState } from "react";
 import { useContestData } from "../../../logic/contexts/ContestDataContext";
 import Sider from "antd/es/layout/Sider";
 import SelectYourTeamCard from "./components/SelectYourTeamCard";
+import ScoreSubmissionFormCard from "./components/ScoreSubmissionFormCard";
 
 interface ContestVotePageProps {}
 
 const ContestVotePage: FunctionComponent<ContestVotePageProps> = () => {
-  const { contest } = useContestData();
+  const { contest, submissions } = useContestData();
+  const [step, setStep] = useState<number>(0);
 
   return (
     <Layout className="fill-height">
@@ -21,15 +23,28 @@ const ContestVotePage: FunctionComponent<ContestVotePageProps> = () => {
             mode="inline"
             items={[
               {
-                key: "team#",
+                key: "0",
                 label: "Select team",
+                onClick: () => setStep(0),
               },
+              ...(submissions?.map((s, i) => ({
+                key: (i + 1).toString(),
+                label: `${s.gameTitle} by ${s.teamName}`,
+                onClick: () => setStep(i + 1),
+              })) ?? []),
             ]}
-            selectedKeys={[]}
+            selectedKeys={[step.toString()]}
           />
         </Sider>
         <Content className="center">
-          <SelectYourTeamCard />
+          {step === 0 ? (
+            <SelectYourTeamCard onComplete={() => setStep(step + 1)} />
+          ) : (
+            <ScoreSubmissionFormCard
+              submission={submissions![step - 1]}
+              onComplete={() => setStep(step + 1)}
+            />
+          )}
         </Content>
       </Layout>
     </Layout>
