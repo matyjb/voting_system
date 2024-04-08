@@ -1,17 +1,13 @@
 import { FunctionComponent } from "react";
 import { useContestData } from "../../../../logic/contexts/ContestDataContext";
-import { TDocRef } from "../../../../data/types";
 import { Card, Space, Button, Divider, Select } from "antd";
+import { VoterActionType, useVoterState } from "./VoterContext";
 
-interface SelectYourTeamCardProps {
-  currentTeamRef?: TDocRef;
-  onSelectTeam: (teamRef?: TDocRef) => void;
-}
-
-const SelectYourTeamCard: FunctionComponent<SelectYourTeamCardProps> = ({
-  currentTeamRef,
-  onSelectTeam,
-}) => {
+const SelectYourTeamCard: FunctionComponent = () => {
+  const {
+    state: { voterTeamId },
+    dispatch,
+  } = useVoterState();
   const { submissions } = useContestData();
 
   const options: { value: string | null; label: string }[] =
@@ -35,14 +31,17 @@ const SelectYourTeamCard: FunctionComponent<SelectYourTeamCardProps> = ({
           options={options}
           style={{ width: "100%" }}
           allowClear
-          value={currentTeamRef?.id}
+          value={voterTeamId}
           dropdownRender={(menu) => (
             <>
               <Button
                 type="text"
                 style={{ width: "100%", textAlign: "start" }}
                 onClick={() => {
-                  onSelectTeam(undefined);
+                  dispatch({
+                    type: VoterActionType.DESELECT_TEAM,
+                    payload: undefined,
+                  });
                 }}
               >
                 Im not in a team
@@ -52,7 +51,10 @@ const SelectYourTeamCard: FunctionComponent<SelectYourTeamCardProps> = ({
             </>
           )}
           onChange={(value) => {
-            onSelectTeam(submissions?.find((s) => s.fbref.id === value)?.fbref);
+            dispatch({
+              type: VoterActionType.SELECT_TEAM,
+              payload: value,
+            });
           }}
         />
         <Button type="primary" style={{ width: "100%" }}>

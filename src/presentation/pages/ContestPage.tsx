@@ -3,6 +3,7 @@ import { FunctionComponent } from "react";
 import ContestAddSubmissionPage from "./ContestAddSubmissionPage";
 import ContestVotePage from "./voter";
 import { ProvideContestData } from "../../logic/ProvideContestData";
+import { VoterStateProvider } from "./voter/components/VoterContext";
 
 const ContestPage: FunctionComponent = () => {
   const { contest } = useContestData();
@@ -23,7 +24,9 @@ const ContestPage: FunctionComponent = () => {
     case "VOTING":
       return (
         <ProvideContestData noVoters>
-          <ContestVotePage />
+          <VoterStateProvider>
+            <ContestVotePage />
+          </VoterStateProvider>
         </ProvideContestData>
       );
   }
