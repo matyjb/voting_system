@@ -1,4 +1,13 @@
-import { Avatar, Button, Flex, Layout, Menu, Space, Typography } from "antd";
+import {
+  Avatar,
+  Badge,
+  Button,
+  Flex,
+  Layout,
+  Menu,
+  Space,
+  Typography,
+} from "antd";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import { FunctionComponent, useState } from "react";
 import { useContestData } from "../../../logic/contexts/ContestDataContext";
@@ -19,16 +28,35 @@ const ContestVotePage: FunctionComponent<ContestVotePageProps> = () => {
 
   const submissionsAmount = submissions?.length ?? 0;
   const lastStepIndex = submissionsAmount + 1;
+  const onStage = submissions?.find(
+    (s) => s.fbref.id === contest?.onStageRef?.id
+  );
 
   return (
     <Layout className="fill-height">
-      <Header style={{ display: "flex", justifyContent: "space-between" }}>
+      <Header
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
         <Space>
           <Avatar src={contest?.logoUrl} icon={<ExperimentOutlined />} />
           <Typography.Title level={3} style={{ margin: 0 }}>
             {contest?.name}
           </Typography.Title>
         </Space>
+
+        {onStage && (
+          <Space>
+            <Badge status="processing" color="blue" />
+            <Typography.Title level={5} style={{ margin: 0 }}>
+              {onStage?.gameTitle} by {onStage?.teamName}
+            </Typography.Title>
+            <Badge status="processing" color="blue" />
+          </Space>
+        )}
         <Space>
           <ThemeToggle />
           <GoogleLoginButton />
