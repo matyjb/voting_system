@@ -1,4 +1,4 @@
-import { Avatar, Button, Layout, Menu, Space, Typography } from "antd";
+import { Avatar, Button, Flex, Layout, Menu, Space, Typography } from "antd";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import { FunctionComponent, useState } from "react";
 import { useContestData } from "../../../logic/contexts/ContestDataContext";
@@ -6,10 +6,10 @@ import Sider from "antd/es/layout/Sider";
 import SelectYourTeam from "./components/SelectYourTeam";
 import SubmitScoresCard from "./components/SubmitScoreCard";
 import SubmissionStep from "./components/SubmissionStep";
-import CategoryVoteSlider from "./components/CategoryVoteSlider";
 import { ExperimentOutlined } from "@ant-design/icons";
 import ThemeToggle from "../../components/ThemeToggle";
 import GoogleLoginButton from "../../components/GoogleLoginButton";
+import CategoryRateCard from "./components/CategoryRateCard";
 
 interface ContestVotePageProps {}
 
@@ -66,13 +66,15 @@ const ContestVotePage: FunctionComponent<ContestVotePageProps> = () => {
                 submission={submissions![step - 1]}
                 index={step - 1}
               >
-                {categories?.map((c) => (
-                  <CategoryVoteSlider
-                    key={c.fbref.id}
-                    category={c}
-                    submission={submissions![step - 1]}
-                  />
-                ))}
+                <Flex gap={"middle"} wrap="wrap">
+                  {categories?.map((c) => (
+                    <CategoryRateCard
+                      key={c.fbref.id}
+                      category={c}
+                      submission={submissions![step - 1]}
+                    />
+                  ))}
+                </Flex>
               </SubmissionStep>
             )}
             {step === lastStepIndex && <SubmitScoresCard />}
