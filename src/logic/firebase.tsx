@@ -143,18 +143,18 @@ const removeSubmission = async (submission: TContestSubmission) => {
 };
 
 //* VOTES
-async function addVoter(
+const addVoter = (
   contest: TContest,
   scores: TScore[],
   voterTeamRef?: TDocRef
-) {
+) => {
   console.log("addVoter", contest, scores, voterTeamRef);
-  await addDoc(collection(db, `${contest.fbref.path}/voters`), {
+  return addDoc(collection(db, `${contest.fbref.path}/voters`), {
     scores,
-    voterTeamRef,
+    voterTeamRef: voterTeamRef || null,
     timestamp: serverTimestamp(),
   } as TContestVoter);
-}
+};
 
 const removeVoter = async (voter: TContestVoter) => {
   console.log("removeVoter", voter);

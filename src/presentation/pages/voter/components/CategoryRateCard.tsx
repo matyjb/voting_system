@@ -69,7 +69,7 @@ const CategoryRateCard: FunctionComponent<CategoryRateCardProps> = ({
     >
       <Flex style={{ justifyContent: "center" }}>
         <Rate
-          defaultValue={3}
+          defaultValue={0}
           value={currentScore}
           onChange={handleScoreChange}
           character={({ index = 0 }) => customIcons[index + 1]}
