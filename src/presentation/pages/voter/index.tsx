@@ -1,12 +1,15 @@
-import { Button, Layout, Menu, Space, Typography } from "antd";
+import { Avatar, Button, Layout, Menu, Space, Typography } from "antd";
 import { Content, Footer, Header } from "antd/es/layout/layout";
 import { FunctionComponent, useState } from "react";
 import { useContestData } from "../../../logic/contexts/ContestDataContext";
 import Sider from "antd/es/layout/Sider";
-import SelectYourTeamCard from "./components/SelectYourTeamCard";
+import SelectYourTeam from "./components/SelectYourTeam";
 import SubmitScoresCard from "./components/SubmitScoreCard";
 import SubmissionStep from "./components/SubmissionStep";
 import CategoryVoteSlider from "./components/CategoryVoteSlider";
+import { ExperimentOutlined } from "@ant-design/icons";
+import ThemeToggle from "../../components/ThemeToggle";
+import GoogleLoginButton from "../../components/GoogleLoginButton";
 
 interface ContestVotePageProps {}
 
@@ -19,8 +22,17 @@ const ContestVotePage: FunctionComponent<ContestVotePageProps> = () => {
 
   return (
     <Layout className="fill-height">
-      <Header>
-        <Typography.Title level={3}>{contest?.name}</Typography.Title>
+      <Header style={{ display: "flex", justifyContent: "space-between" }}>
+        <Space>
+          <Avatar src={contest?.logoUrl} icon={<ExperimentOutlined />} />
+          <Typography.Title level={3} style={{ margin: 0 }}>
+            {contest?.name}
+          </Typography.Title>
+        </Space>
+        <Space>
+          <ThemeToggle />
+          <GoogleLoginButton />
+        </Space>
       </Header>
       <Layout>
         <Sider breakpoint="lg" collapsible>
@@ -48,9 +60,7 @@ const ContestVotePage: FunctionComponent<ContestVotePageProps> = () => {
         </Sider>
         <Layout>
           <Content style={{ padding: 24 }}>
-            {step === 0 && (
-              <SelectYourTeamCard onComplete={() => setStep(step + 1)} />
-            )}
+            {step === 0 && <SelectYourTeam />}
             {step > 0 && step < lastStepIndex && (
               <SubmissionStep
                 submission={submissions![step - 1]}
