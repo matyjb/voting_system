@@ -7,6 +7,7 @@ import CreateContestModalButton from "../components/CreateContestModalButton";
 import ThemeToggle from "../components/ThemeToggle";
 import { useContests } from "../../logic/contexts/ContestsContext";
 import { useContestData } from "../../logic/contexts/ContestDataContext";
+import { useState } from "react";
 
 const { Sider, Header, Content } = Layout;
 const logoUrl =
@@ -17,6 +18,7 @@ type MenuItem = Required<MenuProps>["items"][number];
 export default function ContestsMenu() {
   const { contests } = useContests();
   const { contest } = useContestData();
+  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);
   const navigate = useNavigate();
 
   const items: MenuItem[] = contests.map((contest) => {
@@ -34,16 +36,7 @@ export default function ContestsMenu() {
 
   return (
     <Layout className="fill-height">
-      <Header
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: 1,
-          width: "100%",
-          display: "flex",
-          justifyContent: "space-between",
-        }}
-      >
+      <Header style={{ display: "flex", justifyContent: "space-between" }}>
         <Space>
           <Avatar src={logoUrl} />
           <Typography.Title level={3} style={{ margin: 0 }}>
@@ -55,31 +48,23 @@ export default function ContestsMenu() {
           <GoogleLoginButton />
         </Space>
       </Header>
-      <Layout hasSider>
+      <Layout>
         <Sider
-          style={{
-            overflow: "auto",
-            position: "fixed",
-            left: 0,
-            top: 64,
-            bottom: 0,
-          }}
+          breakpoint="lg"
+          collapsible
+          collapsed={isCollapsed}
+          onCollapse={setIsCollapsed}
         >
-          <Typography.Title level={5} style={{ margin: "16px 4px" }}>
-            My contests
-          </Typography.Title>
           <Menu
             mode="inline"
             items={items}
             selectedKeys={contest ? [contest.fbref.id] : []}
           />
-          <CreateContestModalButton />
+          <CreateContestModalButton collapsed={isCollapsed} />
         </Sider>
-        <Layout style={{ marginLeft: 200 }}>
-          <Content style={{ padding: "12px 48px" }}>
-            <Outlet />
-          </Content>
-        </Layout>
+        <Content style={{ padding: "12px 48px" }}>
+          <Outlet />
+        </Content>
       </Layout>
     </Layout>
   );

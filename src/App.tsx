@@ -1,53 +1,17 @@
 import { ConfigProvider, theme } from "antd";
 import { FunctionComponent } from "react";
-import { RouterProvider, useParams } from "react-router";
+import { RouterProvider } from "react-router";
 import { createBrowserRouter } from "react-router-dom";
 import RequireAuth from "./presentation/components/RequireAuth";
-import ContestPage from "./presentation/pages/ContestPage";
 import ContestsMenu from "./presentation/pages/ContestsMenu";
 import EditContestPage from "./presentation/pages/EditContestPage";
 import ErrorPage from "./presentation/pages/ErrorPage";
 import LandingPage from "./presentation/pages/LandingPage";
 import LoginPage from "./presentation/pages/LoginPage";
 import { useThemeMode } from "./logic/contexts/ThemeModeContext";
-import { ContestsProvider } from "./logic/contexts/ContestsContext";
-import { auth, db } from "./logic/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { doc } from "@firebase/firestore";
-import {
-  ContestDataProvider,
-  ContestDataProviderConfig,
-} from "./logic/contexts/ContestDataContext";
-
-const ProvideContests: FunctionComponent<{ children: JSX.Element }> = ({
-  children,
-}) => {
-  const { userId } = useParams();
-  const [user] = useAuthState(auth);
-
-  return (
-    <ContestsProvider
-      userRef={
-        userId ? doc(db, `users/${userId}`) : doc(db, `users/${user?.uid}`)
-      }
-    >
-      {children}
-    </ContestsProvider>
-  );
-};
-
-const ProvideContestData: FunctionComponent<
-  { children: JSX.Element } & ContestDataProviderConfig
-> = (props) => {
-  const { userId, contestId } = useParams();
-  const [user] = useAuthState(auth);
-
-  const userIdd = userId || user?.uid;
-
-  const contestRef = doc(db, `users/${userIdd}/contests/${contestId}`);
-
-  return <ContestDataProvider {...props} contestRef={contestRef} />;
-};
+import { ProvideContestData } from "./logic/ProvideContestData";
+import ContestPage from "./presentation/pages/ContestPage";
+import { ProvideContests } from "./logic/ProvideContests";
 
 const router = createBrowserRouter([
   {
@@ -83,7 +47,7 @@ const router = createBrowserRouter([
     path: "/:userId/:contestId",
     element: (
       <RequireAuth>
-        <ProvideContestData noSubmissions noVoters>
+        <ProvideContestData noVoters noSubmissions noCategories>
           <ContestPage />
         </ProvideContestData>
       </RequireAuth>
@@ -107,9 +71,11 @@ const App: FunctionComponent = () => {
           Layout: {
             headerBg: mode === "dark" ? "#1f1f1f" : "#fafafa",
             siderBg: mode === "dark" ? "#1f1f1f" : "#fafafa",
+            triggerBg: mode === "dark" ? "#1f1f1f" : "#fafafa",
+            triggerColor: mode === "dark" ? "#fafafa" : "#1f1f1f",
           },
           Menu: {
-            colorItemBg: mode === "dark" ? "#1f1f1f" : "#fafafa",
+            itemBg: mode === "dark" ? "#1f1f1f" : "#fafafa",
           },
         },
       }}

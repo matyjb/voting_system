@@ -18,10 +18,10 @@ import { useContests } from "./ContestsContext";
 
 const ContestDataContext = createContext<{
   contest?: TContest;
-  categories: TContestCategory[];
-  submissions: TContestSubmission[];
-  voters: TContestVoter[];
-}>({ categories: [], submissions: [], voters: [] });
+  categories?: TContestCategory[];
+  submissions?: TContestSubmission[];
+  voters?: TContestVoter[];
+}>({});
 
 export function useContestData() {
   return useContext(ContestDataContext);
@@ -40,16 +40,26 @@ type ContestDataProviderProps = {
 export const ContestDataProvider: FunctionComponent<
   ContestDataProviderProps
 > = ({ contestRef, noCategories, noSubmissions, noVoters, children }) => {
-  const [categories, setCategories] = useState<TContestCategory[]>([]);
-  const [submissions, setSubmissions] = useState<TContestSubmission[]>([]);
-  const [voters, setVoters] = useState<TContestVoter[]>([]);
-  const [contest, setContest] = useState<TContest>();
+  const [_categories, setCategories] = useState<
+    TContestCategory[] | undefined
+  >();
+  const [_submissions, setSubmissions] = useState<
+    TContestSubmission[] | undefined
+  >();
+  const [_voters, setVoters] = useState<TContestVoter[] | undefined>();
+  const [_contest, setContest] = useState<TContest>();
   const { contests } = useContests();
+  const { contest, submissions, categories, voters } = useContestData();
 
   useEffect(() => {
     // data already listened so use it instead
+    if (contest && contest.fbref.path === contestRef.path) {
+      setContest(contest);
+      return;
+    }
+
     if (contests) {
-      const contest = contests.find(
+      let contest = contests.find(
         (contest) => contest.fbref.path === contestRef.path
       );
       if (contest) {
@@ -73,10 +83,21 @@ export const ContestDataProvider: FunctionComponent<
     return () => {
       unsubContest();
     };
-  }, [contestRef]);
+  }, [contest]);
 
   useEffect(() => {
     if (noCategories) return;
+
+    // data already listened so use it instead
+    if (contest && contest.fbref.path === contestRef.path && categories) {
+      setCategories(categories);
+      return;
+    }
+
+    if (noCategories) {
+      setCategories(undefined);
+      return;
+    }
 
     const unsubCategories = onSnapshot(
       collection(db, `${contestRef.path}/categories`),
@@ -97,10 +118,20 @@ export const ContestDataProvider: FunctionComponent<
     return () => {
       unsubCategories();
     };
-  }, [contestRef, noCategories]);
+  }, [contestRef.path, noCategories]);
 
   useEffect(() => {
     if (noSubmissions) return;
+    // data already listened so use it instead
+    if (contest && contest.fbref.path === contestRef.path && submissions) {
+      setSubmissions(submissions);
+      return;
+    }
+
+    if (noSubmissions) {
+      setSubmissions(undefined);
+      return;
+    }
 
     const unsubSubmissions = onSnapshot(
       collection(db, `${contestRef.path}/submissions`),
@@ -121,10 +152,21 @@ export const ContestDataProvider: FunctionComponent<
     return () => {
       unsubSubmissions();
     };
-  }, [contestRef, noSubmissions]);
+  }, [contestRef.path, noSubmissions]);
 
   useEffect(() => {
     if (noVoters) return;
+
+    // data already listened so use it instead
+    if (contest && contest.fbref.path === contestRef.path && voters) {
+      setVoters(voters);
+      return;
+    }
+
+    if (noVoters) {
+      setVoters(undefined);
+      return;
+    }
 
     const unsubVoters = onSnapshot(
       collection(db, `${contestRef.path}/voters`),
@@ -145,11 +187,16 @@ export const ContestDataProvider: FunctionComponent<
     return () => {
       unsubVoters();
     };
-  }, [contestRef, noVoters]);
+  }, [contestRef.path, noVoters]);
 
   return (
     <ContestDataContext.Provider
-      value={{ contest, categories, submissions, voters }}
+      value={{
+        contest: _contest,
+        categories: _categories,
+        submissions: _submissions,
+        voters: _voters,
+      }}
     >
       {children}
     </ContestDataContext.Provider>

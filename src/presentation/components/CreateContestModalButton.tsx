@@ -4,11 +4,13 @@ import { addContest, auth } from "../../logic/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { PlusOutlined } from "@ant-design/icons";
 
-interface CreateContestModalButtonProps {}
+interface CreateContestModalButtonProps {
+  collapsed?: boolean;
+}
 
 const CreateContestModalButton: FunctionComponent<
   CreateContestModalButtonProps
-> = () => {
+> = ({ collapsed }) => {
   const [contestName, setContestName] = useState<string>();
   const [open, setOpen] = useState<boolean>(false);
   const [user] = useAuthState(auth);
@@ -42,7 +44,7 @@ const CreateContestModalButton: FunctionComponent<
         size="large"
         icon={<PlusOutlined />}
       >
-        Create contest
+        {!collapsed && "Create contest"}
       </Button>
       <Modal
         open={open}
