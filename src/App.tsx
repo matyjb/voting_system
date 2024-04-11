@@ -1,7 +1,6 @@
 import { ConfigProvider, theme } from "antd";
 import { FunctionComponent } from "react";
-import { RouterProvider } from "react-router";
-import { createBrowserRouter } from "react-router-dom";
+import { createHashRouter, RouterProvider } from "react-router-dom";
 import RequireAuth from "./presentation/components/RequireAuth";
 import ContestsMenu from "./presentation/pages/ContestsMenu";
 import EditContestPage from "./presentation/pages/EditContestPage";
@@ -13,7 +12,7 @@ import { ProvideContestData } from "./logic/ProvideContestData";
 import ContestPage from "./presentation/pages/ContestPage";
 import { ProvideContests } from "./logic/ProvideContests";
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element: <LandingPage />,
