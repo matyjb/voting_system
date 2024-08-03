@@ -8,10 +8,9 @@ import ThemeToggle from "../components/ThemeToggle";
 import { useContests } from "../../logic/contexts/ContestsContext";
 import { useContestData } from "../../logic/contexts/ContestDataContext";
 import { useState } from "react";
+import { logoUrl } from "../../constants";
 
 const { Sider, Header, Content } = Layout;
-const logoUrl =
-  "https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg";
 
 type MenuItem = Required<MenuProps>["items"][number];
 

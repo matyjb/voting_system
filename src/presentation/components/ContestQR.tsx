@@ -1,9 +1,10 @@
 import { FunctionComponent } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../logic/firebase";
-import { Button, QRCode, Space } from "antd";
-import { DownloadOutlined } from "@ant-design/icons";
+import { Button, notification, QRCode, Space } from "antd";
+import { CopyOutlined, DownloadOutlined } from "@ant-design/icons";
 import { useContestData } from "../../logic/contexts/ContestDataContext";
+import { encodeContestUrl } from "../../router";
 
 interface ContestQRProps {}
 
@@ -25,22 +26,37 @@ const downloadQRCode = () => {
 const ContestQR: FunctionComponent<ContestQRProps> = () => {
   const { contest } = useContestData();
   const [user] = useAuthState(auth);
+  const [api, contextHolder] = notification.useNotification();
 
-  const contestUrl = `${window.location.origin}/${user!.uid}/${
-    contest!.fbref.id
-  }`;
+  const contestUrl = encodeContestUrl(user?.uid ?? "", contest?.fbref.id ?? "");
 
   return (
-    <Space id="contestQR" direction="vertical" align="center">
-      <QRCode value={contestUrl} />
-      <Button
-        type="primary"
-        icon={<DownloadOutlined />}
-        onClick={downloadQRCode}
-      >
-        Download
-      </Button>
-    </Space>
+    <>
+      {contextHolder}
+      <Space id="contestQR" direction="vertical" align="center">
+        <QRCode value={contestUrl} />
+        <Space>
+          <Button
+            type="primary"
+            icon={<CopyOutlined />}
+            onClick={() => {
+              navigator.clipboard.writeText(contestUrl);
+              api.info({
+                message: `Copied!`,
+                placement: "top",
+              });
+            }}
+          />
+          <Button
+            type="primary"
+            icon={<DownloadOutlined />}
+            onClick={downloadQRCode}
+          >
+            Download
+          </Button>
+        </Space>
+      </Space>
+    </>
   );
 };
 
