@@ -83,7 +83,7 @@ export const ContestDataProvider: FunctionComponent<
     return () => {
       unsubContest();
     };
-  }, [contest]);
+  }, [contest, contests, contestRef.path]);
 
   useEffect(() => {
     if (noCategories) return;
