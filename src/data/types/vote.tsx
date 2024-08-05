@@ -13,3 +13,5 @@ export type TScore = {
   submissionRef: TDocRef;
   categoryRef: TDocRef;
 };
+
+export type TResultType = "avg";

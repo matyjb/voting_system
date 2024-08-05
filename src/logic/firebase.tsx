@@ -15,6 +15,7 @@ import {
   deleteDoc,
   serverTimestamp,
   updateDoc,
+  getDocs,
 } from "firebase/firestore";
 import {
   TContest,
@@ -23,8 +24,9 @@ import {
   TDocRef,
   TScore,
 } from "../data/types";
-import { TContestVoter } from "../data/types/vote";
+import { TContestVoter, TResultType } from "../data/types/vote";
 import { FbRef } from "../data/types/fbref";
+import { calcResults } from "./calcResultsAlgorithms";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCWuI7P5Qi4oNmAGzTctcJMOwL8wksab6c",
@@ -78,8 +80,19 @@ const editContest = async (contest: Partial<TContest> & FbRef) => {
 
 const closeContest = async (contest: TContest) => {
   console.log("closeContest", contest);
-  // TODO: Calculate results based on votes
+
   await updateDoc(contest.fbref, { phase: "CLOSED" });
+  // ! just for a test:
+  getDocs(collection(db, `${contest.fbref.path}/voters`)).then((docs) => {
+    const docsData: TContestVoter[] = [];
+    docs.forEach((doc) => {
+      docsData.push({
+        ...(doc.data() as TContestVoter),
+        fbref: doc.ref,
+      });
+    });
+    addResults(contest, docsData, "avg");
+  });
 };
 
 const openContest = async (contest: TContest) => {
@@ -95,6 +108,25 @@ const startContest = async (contest: TContest) => {
 const removeContest = async (contest: TContest) => {
   console.log("removeContest", contest);
   await deleteDoc(contest.fbref);
+};
+
+//* RESULTS
+const addResults = async (
+  contest: TContest,
+  voters: TContestVoter[],
+  calcMode: TResultType = "avg"
+) => {
+  console.log("addResults", contest);
+
+  await addDoc(collection(db, `${contest.fbref.path}/results`), {
+    timestamp: serverTimestamp(),
+    calcMode,
+    results: calcResults(
+      voters.flatMap((v) => v.scores),
+      calcMode
+    ),
+    voters,
+  });
 };
 
 //* CATEGORIES
@@ -172,6 +204,7 @@ export {
   addContest,
   editContest,
   removeContest,
+  addResults as calcResults,
   closeContest,
   openContest,
   startContest,
